@@ -1,4 +1,8 @@
 ---
+jobs:
+  - nginx
+  - wordpress
+  - mysql
 properties:
   wordpress:
     admin: foo@bar.com
