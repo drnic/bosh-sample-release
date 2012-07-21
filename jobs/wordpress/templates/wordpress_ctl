@@ -21,6 +21,8 @@ case $1 in
         /var/vcap/packages/apache2/modules/libphp5.so
     fi
 
+    chmod 755 /var/vcap/jobs/wordpress/
+    
     # link wordpress config file into wordpress package
     if [ ! -f /var/vcap/packages/wordpress/wp-config.php ]; then
       ln -s /var/vcap/jobs/wordpress/config/wp-config.php \
