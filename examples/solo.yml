@@ -1,0 +1,32 @@
+---
+jobs:
+  - nginx
+  - wordpress
+  - mysql
+properties:
+  wordpress:
+    admin: foo@bar.com
+    port: 8008
+    servers:
+      - 127.0.0.1
+    servername: _
+    db:
+      name: wp
+      user: wordpress
+      pass: w0rdpr3ss
+    auth_key: random key
+    secure_auth_key: random key
+    logged_in_key: random key
+    nonce_key: random key
+    auth_salt: random key
+    secure_auth_salt: random key
+    logged_in_salt: random key
+    nonce_salt: random key
+
+  mysql:
+    address: 127.0.0.1
+    port: 3306
+    password: rootpass
+
+  nginx:
+    workers: 1
