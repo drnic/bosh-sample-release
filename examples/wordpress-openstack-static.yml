@@ -21,6 +21,9 @@ update:
   max_errors: 1
 
 networks:
+  - name: floating
+    type: vip
+    cloud_properties: {}
   - name: default
     type: manual
     subnets:
@@ -86,6 +89,9 @@ jobs:
         default: [dns, gateway]
         static_ips:
           - 10.0.1.13 # CHANGE: Static IP 4
+      - name: floating
+        static_ips:
+          - 192.168.1.226 # CHANGE: Floating IP 1
 
 properties:
   env:
@@ -103,7 +109,7 @@ properties:
     admin: foo@bar.com
     servers:
       - 10.0.1.12 # CHANGE: Static IP 3
-    servername: 10.0.1.13 # CHANGE: Static IP 4
+    servername: 192.168.1.226 # CHANGE: Floating IP 1
     db:
       name: wp
       user: wordpress
