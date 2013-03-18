@@ -1,0 +1,118 @@
+---
+name: wordpress
+director_uuid: 5960edfe-5cf4-4b70-95fa-728a52f12b56 # CHANGE: Director UUID
+
+release:
+  name: wordpress
+  version: latest
+
+compilation:
+  workers: 3
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties:
+    instance_type: m1.small
+
+update:
+  canaries: 1
+  canary_watch_time: 3000-120000
+  update_watch_time: 3000-120000
+  max_in_flight: 4
+  max_errors: 1
+
+networks:
+  - name: default
+    type: manual
+    subnets:
+      - name: private
+        range: 10.0.1.0/24
+        gateway: 10.0.1.1
+        reserved:
+          - 10.0.1.2 - 10.0.1.9
+        static:
+          - 10.0.1.10 - 10.0.1.20
+        cloud_properties:
+          security_groups:
+            - default # CHANGE: Security Group
+          net_id: 2438bca2-24fa-450f-ae7b-ec2e53b51984 # CHANGE: OpenStack Quantum network UUID
+
+resource_pools:
+  - name: common
+    network: default
+    size: 4
+    stemcell:
+      name: bosh-stemcell
+      version: latest
+    cloud_properties:
+      instance_type: m1.small
+
+jobs:
+  - name: mysql
+    template: mysql
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+        static_ips:
+          - 10.0.1.10 # CHANGE: Static IP 1
+
+  - name: nfs
+    template: debian_nfs_server
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+        static_ips:
+          - 10.0.1.11 # CHANGE: Static IP 2
+
+  - name: wordpress
+    template: wordpress
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+        static_ips:
+          - 10.0.1.12 # CHANGE: Static IP 3
+
+  - name: nginx
+    template: nginx
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+        static_ips:
+          - 10.0.1.13 # CHANGE: Static IP 4
+
+properties:
+  env:
+
+  mysql:
+    address: 10.0.1.10 # CHANGE: Static IP 1
+    password: rootpass
+
+  nfs_server:
+    address: 10.0.1.11 # CHANGE: Static IP 2
+    network: 10.0.1.12/255.255.255.255 # CHANGE: Static IP 3
+    idmapd_domain: novalocal
+
+  wordpress:
+    admin: foo@bar.com
+    servers:
+      - 10.0.1.12 # CHANGE: Static IP 3
+    servername: 10.0.1.13 # CHANGE: Static IP 4
+    db:
+      name: wp
+      user: wordpress
+      pass: w0rdpr3ss
+    auth_key: random key
+    secure_auth_key: random key
+    logged_in_key: random key
+    nonce_key: random key
+    auth_salt: random key
+    secure_auth_salt: random key
+    logged_in_salt: random key
+    nonce_salt: random key
