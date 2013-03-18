@@ -28,7 +28,7 @@ networks:
     type: dynamic
     cloud_properties:
       security_groups:
-      - default # CHANGE: Security Group
+        - default # CHANGE: Security Group
 
 resource_pools:
   - name: common
@@ -74,7 +74,7 @@ jobs:
         default: [dns, gateway]
       - name: elastic
         static_ips:
-        - 107.21.118.225 # CHANGE: Elastic IP 1
+          - 107.21.118.225 # CHANGE: Elastic IP 1
 
 properties:
   env:
