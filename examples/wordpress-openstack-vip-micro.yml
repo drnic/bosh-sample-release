@@ -28,7 +28,7 @@ networks:
     type: dynamic
     cloud_properties:
       security_groups:
-        - default # CHANGE: Security Group
+        - default # CHANGE: Security Group (ports 22 & 80)
 
 resource_pools:
   - name: common
